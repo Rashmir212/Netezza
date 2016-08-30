@@ -1,0 +1,2 @@
+Select a.*,b.AUDIT_DATE,b.NUM_LOGINS from UED_QBO_DWH..RPTCOMPANYIDS_1 a left join UED_QBO_WS..dlyusage_us b on a.company_id = b.company_id 
+where   a.Trial_create_date >= to_date('2016-03-16', 'YYYY-MM-DD') and a.Trial_create_date < to_date('2016-03-17', 'YYYY-MM-DD') and b.Audit_date >= to_date('2016-03-16', 'YYYY-MM-DD') and b.Audit_date < to_date('2016-03-20', 'YYYY-MM-DD');
