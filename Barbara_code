@@ -1,0 +1,108 @@
+/***Example of Sign up code***/
+PROC SQL;
+   CREATE TABLE signup_data AS 
+   SELECT *
+      FROM PRDCLICK.INFRASTRUCTURE_GLOBAL_SIGNUPS t1;
+     where region_id = 1 
+     and neo_enabled = '1'
+     and subscriber_flag = 1
+     and month(signup_date) in (05, 06, 07, 08, 09, 10)
+    and year(signup_date) in (2014)
+    order by company_id;
+quit ;
+
+
+
+/*
+Example 1:Experiment Segmentation Details
+Schema = UED_QBO_DWH  :   Table = RPTDAILYEXP_1 */
+
+PROC SQL;
+   CREATE TABLE data2 AS 
+   SELECT 
+		cell ,
+		company_cluster_id, 
+		company_id,
+		create_date,
+		experiment_id
+      FROM PRDCLICK.RPTDAILYEXP_1;
+QUIT;
+
+
+/*Example 2: Snipit of code to get to an experiment****/
+
+PROC SQL;
+   CREATE TABLE loc.expr_data AS 
+   SELECT 
+           cell ,
+           company_id as company_id,
+           create_date as create_date_to_exp,
+     experiment_id
+     /*to_char(experiment_id) as expriment_id_str */
+      FROM PRDCLICK.RPTDAILYEXP_1 (DBSASTYPE=(experiment_id='CHAR(30)'))
+        where experiment_id = '2800000000000000522'
+  and cell in (1,0);
+QUIT;
+
+
+***Example of old Snip it of General code for getting company ids***;
+
+PROC SQL;
+   CREATE TABLE data2 AS 
+   SELECT
+  NEXT_DAY(b.LOAD_DATE - 1,'SAT'),
+
+  b.LOAD_DATE,
+  b.COMPANY_ID,
+  a.neo_enabled,
+    Case When a.neo_enabled = 1 Then 'Harmony' 
+   Else 'Classic'
+End,
+  QBORPT.RPTDAILYMART_1.NUM_LOGINS,
+  Case
+  When a.REGION_ID = 1  Then 'USA'
+  When a.REGION_ID = 2  Then 'UK' 
+  When a.REGION_ID = 3  Then 'Canada'
+  When a.REGION_ID = 4  Then 'Singapore'
+End,
+  Case
+  When a.SKU = 1 Then 'QBOE'
+  When a.SKU = 2 Then 'SSOE'
+  When a.SKU = 3 Then 'SS Free'
+  When a.SKU = 4 Then 'AAP'
+  When a.SKU = 5 Then 'IOP'
+  When a.SKU = 6 Then 'Basic'
+  When a.SKU = 7 Then 'Plus'
+  When a.SKU = 8 Then 'IOP for Acct Shells'
+  When a.SKU = 9 Then 'Free'
+  When a.SKU = 11 Then 'Simple Start'
+  When a.SKU = 12 Then 'Essentials'
+End,
+  b.COMPANY_CLUSTER_ID,
+  a.REGION_ID
+FROM
+  QBORPT.RPTCOMPANYIDS_1 a
+INNER JOIN QBORPT.RPTDAILYMART_1 b ON (b.COMPANY_ID=a.COMPANY_ID)
+  
+WHERE
+  (
+  ( ( b.LOAD_DATE) BETWEEN trunc(sysdate)-30 AND trunc(sysdate)-1  )
+
+   AND
+   Case
+  When a.SKU = 1 Then 'QBOE'
+  When a.SKU = 2 Then 'SSOE'
+  When a.SKU = 3 Then 'SS Free'
+  When a.SKU = 4 Then 'AAP'
+  When a.SKU = 5 Then 'IOP'
+  When a.SKU = 6 Then 'Basic'
+  When a.SKU = 7 Then 'Plus'
+  When a.SKU = 8 Then 'IOP for Acct Shells'
+  When a.SKU = 9 Then 'Free'
+  When a.SKU = 11 Then 'Simple Start'
+  When a.SKU = 12 Then 'Essentials'
+End  IN  ( 'QBOE','SSOE','Basic','Plus','Simple Start','Essentials'  )
+  )
+;
+QUIT;
+
