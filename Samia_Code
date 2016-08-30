@@ -1,0 +1,67 @@
+SQL /*Get data from Netezza NPS_Survey_Data*/
+
+PROC SQL;
+	CREATE TABLE WORK.NPS_AugToMar_US AS 
+   	SELECT Distinct 
+	  A.COMPANY_ID, 
+          A.USER_ID, 
+          A.CURRENT_QBO_PRODUCT, 
+          A.IMPORTER_FLAG, 
+          A.SIMPLE_TRIAL_FLAG, 
+          A.FY16_CHANNEL, 
+          A.FY16_CHANNEL_AGG, 
+          A.REGION_ID, 
+          A.REGION_ID_GROUPED, 
+          A.PAYMENTS_ACTIVE_FLAG, 
+          A.PAYROLL_FLAG, 
+          A.CANCEL_FLAG, 
+          A.ACCOUNTANT_ATTACHED_FLAG, 
+          A.INDUSTRY_TYPE, 
+          A.COMBINED_IMPORTER_FLAG, 
+          A.NUM_CURRENT_EMPLOYEES, 
+          A.WEB_RETAIL_FLAG, 
+          A.IPP_FLAG, 
+          A.SIMBA_FLAG, 
+          A.MAYA_FLAG, 
+          A.PAP, 
+          A.MOBILE_FLAG, 
+          A.COMPANY_TENURE, 
+          A.NP_RAW, 
+          A.NP_SEGMENT, 
+          A.SURVEY_DATE, 
+          A.CREATEDTS, 
+          A.NP_SCORE, 
+          A.CARE_FLAG_30, 
+          A.CARE_FLAG_90, 
+          A.NP_VOICE, 
+          A.SURVEY_RANK
+	FROM NZDATA.NPS_SURVEY_DATA A
+	WHERE Survey_Date Between '01Aug2015'd And '31MAR2016'd
+	AND Region_ID = 1
+	Order By COMPANY_ID, SURVEY_DATE;
+	QUIT;
+
+
+/* SQL used in SAS --/*Get Payments and Payroll flags from Infrastructure_Global_signups*/
+
+	PROC SQL;
+	CREATE TABLE WORK.FTU AS 
+   	SELECT Distinct 
+		A.COMPANY_ID, 
+		A.REGION,
+          	A.CURRENT_QBO_PRODUCT, 
+          	A.COMBINED_IMPORTER_FLAG,		  
+		A.QB_IMPORT_DATE,
+	   	A.SIMPLE_TRIAL_FLAG,
+		A.SIGNUP_DATE,
+		A.FIRST_CHARGE_DATE,
+		A.SUBSCRIBER_FLAG,
+		A.CANCEL_DATE, 
+          	A.PAYMENTS_ATTACH_FLAG,
+		A.PAYROLL_PRODUCT, 
+          	A.PAYROLL_ATTACH_FLAG,           
+          	A.ACCOUNTANT_ATTACHED_EVER_FLAG          
+	FROM NZDATA2.INFRASTRUCTURE_GLOBAL_SIGNUPS A
+	WHERE A.SIGNUP_DATE = '16MAR2016'd
+	Order By COMPANY_ID;
+	QUIT;
