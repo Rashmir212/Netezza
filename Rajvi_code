@@ -1,0 +1,101 @@
+create table account_portal_detail as 
+select POST_EVAR58,evar65,hit_timestamp,
+case when evar65 like '%productdetail-tile-clicked%' then 'PD1'
+when evar65 like '%productdetail-back_to_my_account_clicked%' then 'PD2'
+when evar65 like '%productdetail-childoffering_tile_clicked%' then 'PD3'
+when evar65 like '%productdetail-childoffering-back_to_parent_product_clicked%' then 'PD4'
+when evar65 like '%productdetail-download_link%' then 'PD5'
+END as PD,
+
+CASE WHEN evar65 like '% camps:signin-clicked_create_new_account
+%' THEN 'CA1'
+WHEN evar65 like '% signin-clicked_create_new_account-v2%' THEN 'CA2'
+WHEN evar65 like '% claimaccount-goodnews_signin-claim_success-v2%' then 'CA3'
+WHEN evar65 like '% claim_account-signup-success-v2%' then 'CA4'
+END AS CA,
+
+CASE WHEN evar65 like '%orderhistory-link-clicked%' THEN 'OH1'
+WHEN evar65 like '%orderhistory-back_to_my_account_clicked%' THEN 'OH2'
+END AS OH,
+
+CASE WHEN evar65 like '%accountdetail-edit-clicked%' THEN 'AD1'
+WHEN evar65 like '%accountdetail-edit-cancel_trowser_clicked%' THEN 'AD2'
+WHEN evar65 like '%accountdetail-edit-save_and_close_clicked%' THEN 'AD3'
+WHEN evar65 like '%accountdetail-edit-add_new_address_clicked%' THEN 'AD4'
+WHEN evar65 like '%accountdetail-edit-success-updated_existing_addresses%' THEN 'AD5'
+WHEN evar65 like '%accountdetail-edit-success-added_new_addresses%' THEN 'AD6'
+END AS AD,
+
+CASE WHEN evar65 like '%paymenthistory-link-clicked%' THEN 'PH1'
+WHEN evar65 like '%paymenthistory-back_to_my_account_clicked%' THEN 'PH2'
+END AS PH,
+
+
+CASE WHEN evar65 like '%payment_method-edit-clicked%' THEN 'PM1'
+WHEN evar65 like '%payment_method-edit-cancel_trowser_clicked%' THEN 'PM2'
+WHEN evar65 like '%payment_method-edit-save_and_close_clicked%' THEN 'PM3'
+WHEN evar65 like '%paymentmethod-edit-success-credit_card_updated_2022%' THEN 'PM4'
+END AS PM,
+
+CASE WHEN evar65 like '%accountdetail-clicked_delete_address%' THEN 'DA1'
+WHEN evar65 like '%accountdetail-clicked_undo_delete_address%' THEN 'DA2'
+WHEN evar65 like '%accountdetail-edit-error-%' THEN 'DA3'
+WHEN evar65 like '%"accountdetail" AND "delete" AND "success"%' THEN 'DA4'
+WHEN evar65 like '%accountdetail-edit-error-clicked_contactus%' THEN 'DA5'
+END AS DA,
+
+
+CASE WHEN evar65 like '%cancel_subscription_next_button_clicked%' THEN 'CS1'
+WHEN evar65 like '%cancel_subscription_back_button_clicked%' THEN 'CS2'
+WHEN evar65 like '%cancel_subscription_cross_button_clicked%' THEN 'CS3'
+WHEN evar65 like '%cancel_subscription_exit_button_clicked%' THEN 'CS4'
+WHEN evar65 like '%cancel_subscription_confirmation_button_clicked%' THEN 'CS5'
+WHEN evar65 like '%cancel_subscription_service_button_clicked%' THEN 'CS6'
+END AS CS
+
+from USG_SBG.USG_SBG_ETL.TRANS_CLICKSTREAM_SBG_75
+where REPORTSUITE_ID = '51' and substr(hit_timestamp, 1,10) >= '2016-5-1' 
+AND (evar65 like '%productdetail-tile-clicked%'
+or evar65 like '%productdetail-back_to_my_account_clicked%'
+or evar65 like '%productdetail-childoffering_tile_clicked%'
+or evar65 like '%productdetail-childoffering-back_to_parent_product_clicked%'
+or evar65 like '%productdetail-download_link%'
+or evar65 like ''% camps:signin-clicked_create_new_account%'
+or evar65 like '% signin-clicked_create_new_account-v2%'
+or evar65 like '% claimaccount-goodnews_signin-claim_success-v2%' 
+or evar65 like '% claim_account-signup-success-v2%' 
+
+or evar65 like '%orderhistory-link-clicked%'
+or evar65 like '%orderhistory-back_to_my_account_clicked%'
+
+or evar65 like '%accountdetail-edit-clicked%'
+or evar65 like '%accountdetail-edit-cancel_trowser_clicked%'
+or evar65 like '%accountdetail-edit-save_and_close_clicked%'
+or evar65 like '%accountdetail-edit-add_new_address_clicked%'
+or evar65 like '%accountdetail-edit-success-updated_existing_addresses%' 
+or evar65 like '%accountdetail-edit-success-added_new_addresses%' 
+
+
+or evar65 like '%paymenthistory-link-clicked%'
+or evar65 like '%paymenthistory-back_to_my_account_clicked%'
+
+
+or evar65 like '%payment_method-edit-clicked%'
+or evar65 like '%payment_method-edit-cancel_trowser_clicked%'
+or evar65 like '%payment_method-edit-save_and_close_clicked%'
+or evar65 like '%paymentmethod-edit-success-credit_card_updated_2022%' 
+
+
+or evar65 like '%accountdetail-clicked_delete_address%'
+or evar65 like '%accountdetail-clicked_undo_delete_address%'
+or evar65 like '%accountdetail-edit-error-%'
+or evar65 like '%"accountdetail" AND "delete" AND "success"%'
+or evar65 like '%accountdetail-edit-error-clicked_contactus%'
+
+
+or evar65 like '%cancel_subscription_next_button_clicked%'
+or evar65 like '%cancel_subscription_back_button_clicked%'
+or evar65 like '%cancel_subscription_cross_button_clicked%'
+or evar65 like '%cancel_subscription_exit_button_clicked%'
+or evar65 like '%cancel_subscription_confirmation_button_clicked%'
+or evar65 like '%cancel_subscription_service_button_clicked%')
